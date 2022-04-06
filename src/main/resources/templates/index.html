@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Test</title>
+    <style>
+          table {
+              border-collapse: collapse;
+          }
+
+          td, th {
+              border: 1px solid #999;
+              padding: 0.5rem;
+              text-align: left;
+          }
+      </style>
+  </head>
+  <body>
+    <h1>TEST</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Vorname</th><th>Name</th><th>Links</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="mitarbeiter : ${mitarbeiter}">
+          <td th:text="${mitarbeiter.content.vorName}" />
+          <td th:text="${mitarbeiter.content.name}" />
+          <td>
+            <ul>
+              <li th:each="link : ${mitarbeiter.links}">
+                <a th:text="${link.rel}" th:href="${link.href}" />
+              </li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>

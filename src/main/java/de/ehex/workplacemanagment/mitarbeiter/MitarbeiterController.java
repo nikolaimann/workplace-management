@@ -64,7 +64,7 @@ class MitarbeiterController {
         Mitarbeiter updatedMitarbeiter = repository.findById(id)
                 .map(mitarbeiter -> {
                     mitarbeiter.setName(neuerMitarbeiter.getName());
-                    mitarbeiter.setVorName(neuerMitarbeiter.getVorName());
+                    mitarbeiter.setVorname(neuerMitarbeiter.getVorname());
                     return repository.save(mitarbeiter);
                 })
                 .orElseGet(() -> {

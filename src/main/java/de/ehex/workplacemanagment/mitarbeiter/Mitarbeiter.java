@@ -11,23 +11,23 @@ public class Mitarbeiter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private long id;
-    private String vorName;
+    private String vorname;
     private String name;
 
     public Mitarbeiter() {
     }
 
-    public Mitarbeiter(String vorName, String name) {
-        this.vorName = vorName;
+    public Mitarbeiter(String vorname, String name) {
+        this.vorname = vorname;
         this.name = name;
     }
 
-    public String getVorName() {
-        return vorName;
+    public String getVorname() {
+        return vorname;
     }
 
-    public void setVorName(String vorName) {
-        this.vorName = vorName;
+    public void setVorname(String vorname) {
+        this.vorname = vorname;
     }
 
     public String getName() {
@@ -55,17 +55,17 @@ public class Mitarbeiter {
             return false;
         }
         Mitarbeiter m = (Mitarbeiter) o;
-        return Objects.equals(this.id, m.id) && Objects.equals(this.name, m.name) && Objects.equals(this.vorName, m.vorName);
+        return Objects.equals(this.id, m.id) && Objects.equals(this.name, m.name) && Objects.equals(this.vorname, m.vorname);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.id, this.vorName, this.name);
+        return Objects.hash(this.id, this.vorname, this.name);
     }
 
     @Override
     public String toString() {
-        return "Mitarbeiter{" + "id=" + this.id + ", vorName='" + this.vorName + '\'' + ", name='" + this.name
+        return "Mitarbeiter{" + "id=" + this.id + ", vorname='" + this.vorname + '\'' + ", name='" + this.name
                 + '\'' + '}';
     }
 }
