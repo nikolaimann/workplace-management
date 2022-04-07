@@ -10,13 +10,12 @@
 
     <p th:if="${errorMessage}"  th:text="${errorMessage}">Fehler</p>
     <form action="#" th:action="@{/buchung/buchen}" th:object="${createBuchung}" method="post">
-      <p>Mitarbeiter-ID: <input type="text" th:field="*{mitarbeiterId}" placeholder="ID"/></p>
       <p>Arbeitsplatz-ID: <input type="text" th:field="*{arbeitsplatzId}" placeholder="ID"/></p>
       <p>Datum: <input type="date" th:field="*{datum}" /></p>
       <p><input type="submit" value="Buchung abschicken" /></p>
     </form>
 
-    <form th:action="@{/logout}" method="post">
+    <form th:action="@{/logout}" method="get">
       <input type="submit" value="Sign Out"/>
     </form>
   </body>

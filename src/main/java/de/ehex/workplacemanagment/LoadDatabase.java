@@ -15,21 +15,22 @@ public class LoadDatabase {
 
     private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
 
-//    @Bean
-//    CommandLineRunner initDatabase(ArbeitsplatzRepository arbeitsplatzRepository, MitarbeiterRepository mitarbeiterRepository) {
-//
-//        return args -> {
-//          mitarbeiterRepository.save(new Mitarbeiter("Max", "Mustermann"));
-//          mitarbeiterRepository.save(new Mitarbeiter("Josia", "Menger"));
-//          mitarbeiterRepository.save(new Mitarbeiter("Nikolai", "Mann"));
-//          mitarbeiterRepository.save(new Mitarbeiter("Alexander", "Jorde"));
-//
-//          arbeitsplatzRepository.save(new Arbeitsplatz(4, 2, "hinten links"));
-//          arbeitsplatzRepository.save(new Arbeitsplatz(2, 1, "Ultrawide Monitor für Mac geeignet"));
-//
-//          mitarbeiterRepository.findAll().forEach(mitarbeiter -> log.info("Preloading " + mitarbeiter));
-//          arbeitsplatzRepository.findAll().forEach(arbeitsplatz -> log.info("Preloading " + arbeitsplatz));
-//
-//        };
-//    }
+    @Bean
+    CommandLineRunner initDatabase(ArbeitsplatzRepository arbeitsplatzRepository, MitarbeiterRepository mitarbeiterRepository) {
+
+        return args -> {
+            if (mitarbeiterRepository.count() == 0) {
+                mitarbeiterRepository.save(new Mitarbeiter("Max", "Mustermann","geheim", "mustermann"));
+                mitarbeiterRepository.save(new Mitarbeiter("Josia", "Menger","geheim", "menger"));
+                mitarbeiterRepository.save(new Mitarbeiter("Nikolai", "Mann","geheim", "mann"));
+                mitarbeiterRepository.save(new Mitarbeiter("Alexander", "Jorde","geheim", "jorde"));
+                mitarbeiterRepository.findAll().forEach(mitarbeiter -> log.info("Preloading " + mitarbeiter));
+            }
+            if (arbeitsplatzRepository.count() == 0) {
+                arbeitsplatzRepository.save(new Arbeitsplatz(4,  "hinten links",2, ""));
+                arbeitsplatzRepository.save(new Arbeitsplatz(2,  "Ultrawide Monitor für Mac geeignet", 1,""));
+                arbeitsplatzRepository.findAll().forEach(arbeitsplatz -> log.info("Preloading " + arbeitsplatz));
+            }
+        };
+    }
 }

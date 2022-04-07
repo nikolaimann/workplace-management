@@ -2,13 +2,18 @@ package de.ehex.workplacemanagment;
 
 import ch.qos.logback.core.encoder.EchoEncoder;
 import de.ehex.workplacemanagment.buchungen.*;
+import de.ehex.workplacemanagment.mitarbeiter.MitarbeiterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.CurrentSecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +23,9 @@ public class WebController {
 
     @Autowired
     BuchungRepository buchungRepository;
+
+    @Autowired
+    MitarbeiterRepository mitarbeiterRepository;
 
     @Autowired
     BuchungController controller;
@@ -36,10 +44,10 @@ public class WebController {
     }
 
     @PostMapping("/buchung/buchen")
-    public String buchungAbschicken(@ModelAttribute CreateBuchung createBuchung, Model model) {
-
+    public String buchungAbschicken(@ModelAttribute CreateBuchung createBuchung, @CurrentSecurityContext(expression="authentication.name")
+            String benutzername, Model model) {
         try {
-            controller.newBuchung((createBuchung));
+            controller.newBuchung(createBuchung, benutzername);
         } catch (Exception e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "buchen";
@@ -49,18 +57,26 @@ public class WebController {
         return "index";
     }
 
+    @GetMapping("/buchung/meineBuchungen")
+    public String meineBuchungen(@CurrentSecurityContext(expression="authentication.name") String benutzername, Model model) {
+        model.addAttribute("buchungen", buchungRepository.findByMitarbeiterId(mitarbeiterRepository.findMitarbeiterByBenutzername(benutzername).getId()));
+        return "meineBuchungen";
+    }
+
     @GetMapping("/login")
     public String login() {
         return "login";
     }
 
-    @GetMapping("/home")
-    public String home() {
-        return "home";
-    }
 
-    @GetMapping("hello")
-    public String hello() {
-        return "hello";
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request) {
+//        SecurityContextHolder.getContext().setAuthentication(null);
+        HttpSession session = request.getSession(false);
+        SecurityContextHolder.clearContext();
+        if(session != null) {
+            session.invalidate();
+        }
+        return "redirect:/";
     }
 }

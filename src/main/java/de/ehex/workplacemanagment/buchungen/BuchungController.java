@@ -30,8 +30,8 @@ public class BuchungController {
     @Autowired
     BuchungModelAssembler assembler;
 
-    Buchung buchungUeberpruefen(CreateBuchung createBuchung) throws MitarbeiterNotFoundException, ArbeitsplatzNotFoundException {
-        var mitarbeiter = mitarbeiterRepository.findById(createBuchung.getMitarbeiterId())
+    Buchung buchungUeberpruefen(CreateBuchung createBuchung, String username) throws MitarbeiterNotFoundException, ArbeitsplatzNotFoundException {
+        var mitarbeiter = mitarbeiterRepository.findOptionalMitarbeiterByBenutzername(username)
                 .orElseThrow(()-> new MitarbeiterNotFoundException(createBuchung.getMitarbeiterId()));
         var arbeitsplatz = arbeitsplatzRepository.findById(createBuchung.getArbeitsplatzId())
                 .orElseThrow(()-> new ArbeitsplatzNotFoundException(createBuchung.getArbeitsplatzId()));
@@ -52,11 +52,11 @@ public class BuchungController {
     // end::get-aggregate-root[]
 
     @PostMapping("/buchung")
-    public ResponseEntity<?> newBuchung(@RequestBody CreateBuchung createBuchung) throws ArbeitsplatzBelegtException, ArbeitsplatzNotFoundException, MitarbeiterNotFoundException {
+    public ResponseEntity<?> newBuchung(@RequestBody CreateBuchung createBuchung, String username) throws ArbeitsplatzBelegtException, ArbeitsplatzNotFoundException, MitarbeiterNotFoundException {
        if (buchungRepository.existsByArbeitsplatzIdAndDatum(createBuchung.getArbeitsplatzId(), LocalDate.parse(createBuchung.getDatum()))) {
            throw new ArbeitsplatzBelegtException(createBuchung.getArbeitsplatzId(), LocalDate.parse(createBuchung.getDatum()));
        }
-        Buchung buchung = buchungRepository.save(buchungUeberpruefen(createBuchung));
+        Buchung buchung = buchungRepository.save(buchungUeberpruefen(createBuchung, username));
 
         EntityModel<Buchung> entityModel = assembler.toModel(buchung);
 
@@ -75,23 +75,23 @@ public class BuchungController {
         return assembler.toModel(buchung);
     }
 
-    @PutMapping("/buchung/{id}")
-    ResponseEntity<?> replaceBuchung(@RequestBody CreateBuchung createBuchung, @PathVariable Long id) {
-
-        Buchung updatedBuchung = buchungRepository.findById(id)
-                .map(buchung -> {
-                    buchung.setMitarbeiter(mitarbeiterRepository.getById(createBuchung.getMitarbeiterId()));
-                    buchung.setArbeitsplatz(arbeitsplatzRepository.getById(createBuchung.getArbeitsplatzId()));
-                    return buchungRepository.save(buchung);
-                })
-                .orElseGet(() -> buchungUeberpruefen(createBuchung));
-
-        EntityModel<Buchung> entityModel = assembler.toModel(updatedBuchung);
-
-        return ResponseEntity
-                .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
-                .body(entityModel);
-    }
+//    @PutMapping("/buchung/{id}")
+//    ResponseEntity<?> replaceBuchung(@RequestBody CreateBuchung createBuchung, @PathVariable Long id) {
+//
+//        Buchung updatedBuchung = buchungRepository.findById(id)
+//                .map(buchung -> {
+//                    buchung.setMitarbeiter(mitarbeiterRepository.getById(createBuchung.getMitarbeiterId()));
+//                    buchung.setArbeitsplatz(arbeitsplatzRepository.getById(createBuchung.getArbeitsplatzId()));
+//                    return buchungRepository.save(buchung);
+//                })
+//                .orElseGet(() -> buchungUeberpruefen(createBuchung));
+//
+//        EntityModel<Buchung> entityModel = assembler.toModel(updatedBuchung);
+//
+//        return ResponseEntity
+//                .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+//                .body(entityModel);
+//    }
 
     @DeleteMapping("/buchung/{id}")
     ResponseEntity<?> deleteBuchung(@PathVariable Long id) {

@@ -13,15 +13,17 @@ public class Mitarbeiter {
     private long id;
     private String vorname;
     private String name;
+    private String benutzername;
     private String passwort;
 
     public Mitarbeiter() {
     }
 
-    public Mitarbeiter(String vorname, String name, String passwort) {
+    public Mitarbeiter(String vorname, String name, String passwort, String benutzername) {
         this.vorname = vorname;
         this.name = name;
         this.passwort = passwort;
+        this.benutzername = benutzername;
     }
 
     public String getVorname() {
@@ -56,6 +58,14 @@ public class Mitarbeiter {
         this.passwort = passwort;
     }
 
+    public String getBenutzername() {
+        return benutzername;
+    }
+
+    public void setBenutzername(String benutzername) {
+        this.benutzername = benutzername;
+    }
+
     @Override
     public boolean equals(Object o) {
 
@@ -68,12 +78,13 @@ public class Mitarbeiter {
         return Objects.equals(this.id, m.id)
                 && Objects.equals(this.name, m.name)
                 && Objects.equals(this.vorname, m.vorname)
-                && Objects.equals(this.passwort, m.passwort);
+                && Objects.equals(this.passwort, m.passwort)
+                && Objects.equals(this.benutzername, m.benutzername);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.id, this.vorname, this.name, this.passwort);
+        return Objects.hash(this.id, this.vorname, this.name, this.passwort, this.benutzername);
     }
 
     @Override
@@ -82,6 +93,7 @@ public class Mitarbeiter {
                 + ", vorname='" + this.vorname
                 + "', name='" + this.name
                 + ", passwort '" + this.passwort
+                + ", benutzername '" + this.benutzername
                 + "'}";
     }
 }

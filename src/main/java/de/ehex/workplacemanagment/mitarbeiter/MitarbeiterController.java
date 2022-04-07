@@ -66,6 +66,7 @@ class MitarbeiterController {
                     mitarbeiter.setName(neuerMitarbeiter.getName());
                     mitarbeiter.setVorname(neuerMitarbeiter.getVorname());
                     mitarbeiter.setPasswort(neuerMitarbeiter.getPasswort());
+                    mitarbeiter.setBenutzername(neuerMitarbeiter.getBenutzername());
                     return repository.save(mitarbeiter);
                 })
                 .orElseGet(() -> {
