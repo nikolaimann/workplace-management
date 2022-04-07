@@ -65,6 +65,7 @@ class MitarbeiterController {
                 .map(mitarbeiter -> {
                     mitarbeiter.setName(neuerMitarbeiter.getName());
                     mitarbeiter.setVorname(neuerMitarbeiter.getVorname());
+                    mitarbeiter.setPasswort(neuerMitarbeiter.getPasswort());
                     return repository.save(mitarbeiter);
                 })
                 .orElseGet(() -> {

@@ -1,4 +1,4 @@
-package de.ehex.workplacemanagment.platzbuchung;
+package de.ehex.workplacemanagment.buchungen;
 
 import de.ehex.workplacemanagment.arbeitsplatz.Arbeitsplatz;
 import de.ehex.workplacemanagment.mitarbeiter.Mitarbeiter;

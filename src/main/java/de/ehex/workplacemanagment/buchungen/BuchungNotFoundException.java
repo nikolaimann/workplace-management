@@ -1,4 +1,4 @@
-package de.ehex.workplacemanagment.platzbuchung;
+package de.ehex.workplacemanagment.buchungen;
 
 public class BuchungNotFoundException extends RuntimeException {
 

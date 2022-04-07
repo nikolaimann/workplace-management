@@ -15,21 +15,21 @@ public class LoadDatabase {
 
     private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
 
-    @Bean
-    CommandLineRunner initDatabase(ArbeitsplatzRepository arbeitsplatzRepository, MitarbeiterRepository mitarbeiterRepository) {
-
-        return args -> {
-          mitarbeiterRepository.save(new Mitarbeiter("Max", "Mustermann"));
-          mitarbeiterRepository.save(new Mitarbeiter("Josia", "Menger"));
-          mitarbeiterRepository.save(new Mitarbeiter("Nikolai", "Mann"));
-          mitarbeiterRepository.save(new Mitarbeiter("Alexander", "Jorde"));
-
-          arbeitsplatzRepository.save(new Arbeitsplatz(4, 2, "hinten links"));
-          arbeitsplatzRepository.save(new Arbeitsplatz(2, 1, "Ultrawide Monitor für Mac geeignet"));
-
-          mitarbeiterRepository.findAll().forEach(mitarbeiter -> log.info("Preloading " + mitarbeiter));
-          arbeitsplatzRepository.findAll().forEach(arbeitsplatz -> log.info("Preloading " + arbeitsplatz));
-
-        };
-    }
+//    @Bean
+//    CommandLineRunner initDatabase(ArbeitsplatzRepository arbeitsplatzRepository, MitarbeiterRepository mitarbeiterRepository) {
+//
+//        return args -> {
+//          mitarbeiterRepository.save(new Mitarbeiter("Max", "Mustermann"));
+//          mitarbeiterRepository.save(new Mitarbeiter("Josia", "Menger"));
+//          mitarbeiterRepository.save(new Mitarbeiter("Nikolai", "Mann"));
+//          mitarbeiterRepository.save(new Mitarbeiter("Alexander", "Jorde"));
+//
+//          arbeitsplatzRepository.save(new Arbeitsplatz(4, 2, "hinten links"));
+//          arbeitsplatzRepository.save(new Arbeitsplatz(2, 1, "Ultrawide Monitor für Mac geeignet"));
+//
+//          mitarbeiterRepository.findAll().forEach(mitarbeiter -> log.info("Preloading " + mitarbeiter));
+//          arbeitsplatzRepository.findAll().forEach(arbeitsplatz -> log.info("Preloading " + arbeitsplatz));
+//
+//        };
+//    }
 }

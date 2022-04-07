@@ -1,4 +1,4 @@
-package de.ehex.workplacemanagment.platzbuchung;
+package de.ehex.workplacemanagment.buchungen;
 
 import java.time.LocalDate;
 
@@ -6,7 +6,7 @@ public class CreateBuchung {
 
     private long mitarbeiterId;
     private long arbeitsplatzId;
-    private LocalDate datum;
+    private String datum;
 
     public long getMitarbeiterId() {
         return mitarbeiterId;
@@ -24,11 +24,12 @@ public class CreateBuchung {
         this.arbeitsplatzId = arbeitsplatzId;
     }
 
-    public LocalDate getDatum() {
+    public String getDatum() {
         return datum;
     }
 
-    public void setDatum(LocalDate datum) {
+    public void setDatum(String datum) {
         this.datum = datum;
     }
+
 }

@@ -64,6 +64,7 @@ public class ArbeitsplatzController {
                     arbeitsplatz.setAnzahlBildschirme(neuerArbeitsplatz.getAnzahlBildschirme());
                     arbeitsplatz.setBeschreibung(neuerArbeitsplatz.getBeschreibung());
                     arbeitsplatz.setRaum(neuerArbeitsplatz.getRaum());
+                    arbeitsplatz.setTischBezeichnung(neuerArbeitsplatz.getTischBezeichnung());
                     return repository.save(arbeitsplatz);
                 }) //
                 .orElseGet(() -> {

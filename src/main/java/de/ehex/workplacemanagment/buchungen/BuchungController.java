@@ -1,4 +1,4 @@
-package de.ehex.workplacemanagment.platzbuchung;
+package de.ehex.workplacemanagment.buchungen;
 
 import de.ehex.workplacemanagment.arbeitsplatz.ArbeitsplatzNotFoundException;
 import de.ehex.workplacemanagment.arbeitsplatz.ArbeitsplatzRepository;
@@ -11,6 +11,7 @@ import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,7 +19,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-public class PlatzbuchungsController {
+public class BuchungController {
 
     @Autowired
     MitarbeiterRepository mitarbeiterRepository;
@@ -27,14 +28,14 @@ public class PlatzbuchungsController {
     @Autowired
     BuchungRepository buchungRepository;
     @Autowired
-    PlatzbuchungModelAssembler assembler;
+    BuchungModelAssembler assembler;
 
-    public Buchung buchen(CreateBuchung createBuchung) {
+    Buchung buchungUeberpruefen(CreateBuchung createBuchung) throws MitarbeiterNotFoundException, ArbeitsplatzNotFoundException {
         var mitarbeiter = mitarbeiterRepository.findById(createBuchung.getMitarbeiterId())
                 .orElseThrow(()-> new MitarbeiterNotFoundException(createBuchung.getMitarbeiterId()));
         var arbeitsplatz = arbeitsplatzRepository.findById(createBuchung.getArbeitsplatzId())
                 .orElseThrow(()-> new ArbeitsplatzNotFoundException(createBuchung.getArbeitsplatzId()));
-        return new Buchung(mitarbeiter, arbeitsplatz, createBuchung.getDatum());
+        return new Buchung(mitarbeiter, arbeitsplatz, LocalDate.parse(createBuchung.getDatum()));
     }
 
     // Aggregate root
@@ -46,16 +47,16 @@ public class PlatzbuchungsController {
                 .map(assembler::toModel) //
                 .collect(Collectors.toList());
 
-        return CollectionModel.of(m, linkTo(methodOn(PlatzbuchungsController.class).all()).withSelfRel());
+        return CollectionModel.of(m, linkTo(methodOn(BuchungController.class).all()).withSelfRel());
     }
     // end::get-aggregate-root[]
 
     @PostMapping("/buchung")
-    ResponseEntity<?> newBuchung(@RequestBody CreateBuchung createBuchung) {
-       if (buchungRepository.existsByArbeitsplatzIdAndDatum(createBuchung.getArbeitsplatzId(), createBuchung.getDatum())) {
-           throw new ArbeitsplatzBelegtException(createBuchung.getArbeitsplatzId(), createBuchung.getDatum());
+    public ResponseEntity<?> newBuchung(@RequestBody CreateBuchung createBuchung) throws ArbeitsplatzBelegtException, ArbeitsplatzNotFoundException, MitarbeiterNotFoundException {
+       if (buchungRepository.existsByArbeitsplatzIdAndDatum(createBuchung.getArbeitsplatzId(), LocalDate.parse(createBuchung.getDatum()))) {
+           throw new ArbeitsplatzBelegtException(createBuchung.getArbeitsplatzId(), LocalDate.parse(createBuchung.getDatum()));
        }
-        Buchung buchung = buchungRepository.save(buchen(createBuchung));
+        Buchung buchung = buchungRepository.save(buchungUeberpruefen(createBuchung));
 
         EntityModel<Buchung> entityModel = assembler.toModel(buchung);
 
@@ -83,7 +84,7 @@ public class PlatzbuchungsController {
                     buchung.setArbeitsplatz(arbeitsplatzRepository.getById(createBuchung.getArbeitsplatzId()));
                     return buchungRepository.save(buchung);
                 })
-                .orElseGet(() -> buchen(createBuchung));
+                .orElseGet(() -> buchungUeberpruefen(createBuchung));
 
         EntityModel<Buchung> entityModel = assembler.toModel(updatedBuchung);
 

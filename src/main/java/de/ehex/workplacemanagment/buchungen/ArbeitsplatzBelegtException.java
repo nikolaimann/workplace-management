@@ -1,4 +1,4 @@
-package de.ehex.workplacemanagment.platzbuchung;
+package de.ehex.workplacemanagment.buchungen;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

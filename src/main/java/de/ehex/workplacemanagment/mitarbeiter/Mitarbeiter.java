@@ -13,13 +13,15 @@ public class Mitarbeiter {
     private long id;
     private String vorname;
     private String name;
+    private String passwort;
 
     public Mitarbeiter() {
     }
 
-    public Mitarbeiter(String vorname, String name) {
+    public Mitarbeiter(String vorname, String name, String passwort) {
         this.vorname = vorname;
         this.name = name;
+        this.passwort = passwort;
     }
 
     public String getVorname() {
@@ -46,6 +48,14 @@ public class Mitarbeiter {
         this.id = id;
     }
 
+    public String getPasswort() {
+        return passwort;
+    }
+
+    public void setPasswort(String passwort) {
+        this.passwort = passwort;
+    }
+
     @Override
     public boolean equals(Object o) {
 
@@ -55,17 +65,23 @@ public class Mitarbeiter {
             return false;
         }
         Mitarbeiter m = (Mitarbeiter) o;
-        return Objects.equals(this.id, m.id) && Objects.equals(this.name, m.name) && Objects.equals(this.vorname, m.vorname);
+        return Objects.equals(this.id, m.id)
+                && Objects.equals(this.name, m.name)
+                && Objects.equals(this.vorname, m.vorname)
+                && Objects.equals(this.passwort, m.passwort);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.id, this.vorname, this.name);
+        return Objects.hash(this.id, this.vorname, this.name, this.passwort);
     }
 
     @Override
     public String toString() {
-        return "Mitarbeiter{" + "id=" + this.id + ", vorname='" + this.vorname + '\'' + ", name='" + this.name
-                + '\'' + '}';
+        return "Mitarbeiter{" + "id=" + this.id
+                + ", vorname='" + this.vorname
+                + "', name='" + this.name
+                + ", passwort '" + this.passwort
+                + "'}";
     }
 }

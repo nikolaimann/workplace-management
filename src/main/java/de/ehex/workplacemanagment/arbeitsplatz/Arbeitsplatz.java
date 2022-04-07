@@ -13,13 +13,15 @@ public class Arbeitsplatz {
     private long id;
     private long anzahlBildschirme;
     private long raum;
+    private String tischBezeichnung;
     private String beschreibung;
 
     public Arbeitsplatz() {
     }
 
-    public Arbeitsplatz(long raum, long anzahlBildschirme, String beschreibung) {
+    public Arbeitsplatz(long raum, String tischBezeichnung, long anzahlBildschirme, String beschreibung) {
         this.raum = raum;
+        this.tischBezeichnung = tischBezeichnung;
         this.anzahlBildschirme = anzahlBildschirme;
         this.beschreibung = beschreibung;
     }
@@ -56,6 +58,14 @@ public class Arbeitsplatz {
         this.beschreibung = beschreibung;
     }
 
+    public String getTischBezeichnung() {
+        return tischBezeichnung;
+    }
+
+    public void setTischBezeichnung(String tischBezeichnung) {
+        this.tischBezeichnung = tischBezeichnung;
+    }
+
     @Override
     public boolean equals(Object o) {
 
@@ -66,20 +76,23 @@ public class Arbeitsplatz {
         }
         Arbeitsplatz m = (Arbeitsplatz) o;
         return Objects.equals(this.id, m.id) && Objects.equals(this.anzahlBildschirme, m.anzahlBildschirme)
-                && Objects.equals(this.raum, m.raum) && Objects.equals(this.beschreibung, m.beschreibung);
+                && Objects.equals(this.raum, m.raum) && Objects.equals(this.beschreibung, m.beschreibung)
+                && Objects.equals(this.tischBezeichnung, m.tischBezeichnung);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.id, this.anzahlBildschirme, this.raum, this.beschreibung);
+        return Objects.hash(this.id, this.anzahlBildschirme, this.raum, this.beschreibung, this.tischBezeichnung);
     }
 
     @Override
     public String toString() {
         return "Mitarbeiter{" + "id=" + this.id + ", anzahlBildschirme='" + this.anzahlBildschirme
                 + '\'' + ", raum='" + this.raum + '\'' + ", beschreibung='" + this.beschreibung
+                + '\'' + ", tischBezeichnung'" + this.tischBezeichnung
                 + '\'' + '}';
     }
+
 }
 
 
