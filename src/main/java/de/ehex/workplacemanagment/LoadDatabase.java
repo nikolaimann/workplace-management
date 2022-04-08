@@ -24,11 +24,12 @@ public class LoadDatabase {
                 mitarbeiterRepository.save(new Mitarbeiter("Josia", "Menger","geheim", "menger"));
                 mitarbeiterRepository.save(new Mitarbeiter("Nikolai", "Mann","geheim", "mann"));
                 mitarbeiterRepository.save(new Mitarbeiter("Alexander", "Jorde","geheim", "jorde"));
+                mitarbeiterRepository.save(new Mitarbeiter("Admin", "Admin","admin", "admin"));
                 mitarbeiterRepository.findAll().forEach(mitarbeiter -> log.info("Preloading " + mitarbeiter));
             }
             if (arbeitsplatzRepository.count() == 0) {
-                arbeitsplatzRepository.save(new Arbeitsplatz(4,  "hinten links",2, ""));
-                arbeitsplatzRepository.save(new Arbeitsplatz(2,  "Ultrawide Monitor für Mac geeignet", 1,""));
+                arbeitsplatzRepository.save(new Arbeitsplatz(4,  "hinten links",2, "-"));
+                arbeitsplatzRepository.save(new Arbeitsplatz(2,  "tür, rechts", 1,"Ultrawide Monitor"));
                 arbeitsplatzRepository.findAll().forEach(arbeitsplatz -> log.info("Preloading " + arbeitsplatz));
             }
         };

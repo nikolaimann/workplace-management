@@ -51,6 +51,7 @@
     <h1>Alle Buchungen</h1>
     <a href="/buchung/meineBuchungen">Meine Buchungen anzeigen</a>
     <a href="/buchung/buchen">Arbeitsplatz buchen</a>
+    <a href="/logout" style="background-color: #c94114;"/>Logout</a>
     <table>
         <tr>
           <th>Buchung-Id</th><th>Mitarbeiter</th><th>Arbeitsplatz</th><th>Datum</th>
@@ -68,7 +69,5 @@
           <td th:text="${buchung.datum}" />
         </tr>
     </table>
-    <a href="/logout" />Logout</a>
-
   </body>
 </html>

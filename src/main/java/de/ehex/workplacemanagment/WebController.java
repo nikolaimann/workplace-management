@@ -1,6 +1,5 @@
 package de.ehex.workplacemanagment;
 
-import ch.qos.logback.core.encoder.EchoEncoder;
 import de.ehex.workplacemanagment.buchungen.*;
 import de.ehex.workplacemanagment.mitarbeiter.MitarbeiterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -63,11 +63,18 @@ public class WebController {
         return "meineBuchungen";
     }
 
+    @GetMapping("/buchung/delete")
+    public String buchungLoeschen(@RequestParam(name="id") long id , @CurrentSecurityContext(expression="authentication.name") String benutzername, Model model) {
+        controller.deleteBuchung(id);
+        model.addAttribute("buchungen", buchungRepository.findByMitarbeiterId(mitarbeiterRepository.findMitarbeiterByBenutzername(benutzername).getId()));
+        return "meineBuchungen";
+    }
+
+
     @GetMapping("/login")
     public String login() {
         return "login";
     }
-
 
     @GetMapping("/logout")
     public String logout(HttpServletRequest request) {
@@ -79,4 +86,5 @@ public class WebController {
         }
         return "redirect:/";
     }
+
 }

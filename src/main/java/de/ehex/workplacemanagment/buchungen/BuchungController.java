@@ -9,6 +9,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -41,7 +42,7 @@ public class BuchungController {
     // Aggregate root
     // tag::get-aggregate-root[]
     @GetMapping("/buchungen")
-    CollectionModel<EntityModel<Buchung>> all() {
+    public CollectionModel<EntityModel<Buchung>> all() {
 
         List<EntityModel<Buchung>> m = buchungRepository.findAll().stream() //
                 .map(assembler::toModel) //
@@ -52,7 +53,7 @@ public class BuchungController {
     // end::get-aggregate-root[]
 
     @PostMapping("/buchung")
-    public ResponseEntity<?> newBuchung(@RequestBody CreateBuchung createBuchung, String username) throws ArbeitsplatzBelegtException, ArbeitsplatzNotFoundException, MitarbeiterNotFoundException {
+    public ResponseEntity<?> newBuchung(@RequestBody CreateBuchung createBuchung, @CurrentSecurityContext(expression="authentication.name") String username) throws ArbeitsplatzBelegtException, ArbeitsplatzNotFoundException, MitarbeiterNotFoundException {
        if (buchungRepository.existsByArbeitsplatzIdAndDatum(createBuchung.getArbeitsplatzId(), LocalDate.parse(createBuchung.getDatum()))) {
            throw new ArbeitsplatzBelegtException(createBuchung.getArbeitsplatzId(), LocalDate.parse(createBuchung.getDatum()));
        }
@@ -67,7 +68,7 @@ public class BuchungController {
     // Single item
 
     @GetMapping("/buchung/{id}")
-    EntityModel<Buchung> one(@PathVariable Long id) {
+    public EntityModel<Buchung> one(@PathVariable Long id) {
 
         Buchung buchung = buchungRepository.findById(id)
                 .orElseThrow(() -> new BuchungNotFoundException(id));
@@ -94,7 +95,7 @@ public class BuchungController {
 //    }
 
     @DeleteMapping("/buchung/{id}")
-    ResponseEntity<?> deleteBuchung(@PathVariable Long id) {
+    public ResponseEntity<?> deleteBuchung(@PathVariable Long id) {
 
         buchungRepository.deleteById(id);
 
