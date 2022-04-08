@@ -20,7 +20,6 @@ public class LoadDatabase {
 
         return args -> {
             if (mitarbeiterRepository.count() == 0) {
-                mitarbeiterRepository.save(new Mitarbeiter("Max", "Mustermann","geheim", "mustermann"));
                 mitarbeiterRepository.save(new Mitarbeiter("Josia", "Menger","geheim", "menger"));
                 mitarbeiterRepository.save(new Mitarbeiter("Nikolai", "Mann","geheim", "mann"));
                 mitarbeiterRepository.save(new Mitarbeiter("Alexander", "Jorde","geheim", "jorde"));

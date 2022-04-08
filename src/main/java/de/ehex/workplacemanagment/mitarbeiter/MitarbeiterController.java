@@ -27,7 +27,7 @@ class MitarbeiterController {
 
     // Aggregate root
     // tag::get-aggregate-root[]
-    @GetMapping("/mitarbeiter")
+    @GetMapping("/api/mitarbeiter")
     CollectionModel<EntityModel<Mitarbeiter>> all() {
 
         List<EntityModel<Mitarbeiter>> m = repository.findAll().stream() //
@@ -38,7 +38,7 @@ class MitarbeiterController {
     }
     // end::get-aggregate-root[]
 
-    @PostMapping("/mitarbeiter")
+    @PostMapping("/api/mitarbeiter")
     ResponseEntity<?> newMitarbeiter(@RequestBody Mitarbeiter newEmployee) {
 
         EntityModel<Mitarbeiter> entityModel = assembler.toModel(repository.save(newEmployee));
@@ -49,7 +49,7 @@ class MitarbeiterController {
     }
     // Single item
 
-    @GetMapping("/mitarbeiter/{id}")
+    @GetMapping("/api/mitarbeiter/{id}")
     EntityModel<Mitarbeiter> one(@PathVariable Long id) {
 
         Mitarbeiter mitarbeiter = repository.findById(id)
@@ -58,7 +58,7 @@ class MitarbeiterController {
         return assembler.toModel(mitarbeiter);
     }
 
-    @PutMapping("/mitarbeiter/{id}")
+    @PutMapping("/api/mitarbeiter/{id}")
     ResponseEntity<?> replaceMitarbeiter(@RequestBody Mitarbeiter neuerMitarbeiter, @PathVariable Long id) {
 
         Mitarbeiter updatedMitarbeiter = repository.findById(id)
@@ -81,7 +81,7 @@ class MitarbeiterController {
                 .body(entityModel);
     }
 
-    @DeleteMapping("/mitarbeiter/{id}")
+    @DeleteMapping("/api/mitarbeiter/{id}")
     ResponseEntity<?> deleteMitarbeiter(@PathVariable Long id) {
 
         repository.deleteById(id);

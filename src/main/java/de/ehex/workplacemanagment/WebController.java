@@ -70,7 +70,6 @@ public class WebController {
         return "meineBuchungen";
     }
 
-
     @GetMapping("/login")
     public String login() {
         return "login";
@@ -78,7 +77,6 @@ public class WebController {
 
     @GetMapping("/logout")
     public String logout(HttpServletRequest request) {
-//        SecurityContextHolder.getContext().setAuthentication(null);
         HttpSession session = request.getSession(false);
         SecurityContextHolder.clearContext();
         if(session != null) {
@@ -86,5 +84,4 @@ public class WebController {
         }
         return "redirect:/";
     }
-
 }

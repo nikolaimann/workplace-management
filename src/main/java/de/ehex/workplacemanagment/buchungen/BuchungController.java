@@ -31,7 +31,8 @@ public class BuchungController {
     @Autowired
     BuchungModelAssembler assembler;
 
-    Buchung buchungUeberpruefen(CreateBuchung createBuchung, String username) throws MitarbeiterNotFoundException, ArbeitsplatzNotFoundException {
+    Buchung buchungUeberpruefen(CreateBuchung createBuchung, String username)
+            throws MitarbeiterNotFoundException, ArbeitsplatzNotFoundException {
         var mitarbeiter = mitarbeiterRepository.findOptionalMitarbeiterByBenutzername(username)
                 .orElseThrow(()-> new MitarbeiterNotFoundException(createBuchung.getMitarbeiterId()));
         var arbeitsplatz = arbeitsplatzRepository.findById(createBuchung.getArbeitsplatzId())
@@ -41,7 +42,7 @@ public class BuchungController {
 
     // Aggregate root
     // tag::get-aggregate-root[]
-    @GetMapping("/buchungen")
+    @GetMapping("/api/buchungen")
     public CollectionModel<EntityModel<Buchung>> all() {
 
         List<EntityModel<Buchung>> m = buchungRepository.findAll().stream() //
@@ -52,8 +53,9 @@ public class BuchungController {
     }
     // end::get-aggregate-root[]
 
-    @PostMapping("/buchung")
-    public ResponseEntity<?> newBuchung(@RequestBody CreateBuchung createBuchung, @CurrentSecurityContext(expression="authentication.name") String username) throws ArbeitsplatzBelegtException, ArbeitsplatzNotFoundException, MitarbeiterNotFoundException {
+    @PostMapping("/api/buchung")
+    public ResponseEntity<?> newBuchung(@RequestBody CreateBuchung createBuchung, @CurrentSecurityContext(expression="authentication.name") String username)
+            throws ArbeitsplatzBelegtException, ArbeitsplatzNotFoundException, MitarbeiterNotFoundException {
        if (buchungRepository.existsByArbeitsplatzIdAndDatum(createBuchung.getArbeitsplatzId(), LocalDate.parse(createBuchung.getDatum()))) {
            throw new ArbeitsplatzBelegtException(createBuchung.getArbeitsplatzId(), LocalDate.parse(createBuchung.getDatum()));
        }
@@ -67,7 +69,7 @@ public class BuchungController {
     }
     // Single item
 
-    @GetMapping("/buchung/{id}")
+    @GetMapping("/api/buchung/{id}")
     public EntityModel<Buchung> one(@PathVariable Long id) {
 
         Buchung buchung = buchungRepository.findById(id)
@@ -94,7 +96,7 @@ public class BuchungController {
 //                .body(entityModel);
 //    }
 
-    @DeleteMapping("/buchung/{id}")
+    @DeleteMapping("/api/buchung/{id}")
     public ResponseEntity<?> deleteBuchung(@PathVariable Long id) {
 
         buchungRepository.deleteById(id);

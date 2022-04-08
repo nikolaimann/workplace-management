@@ -25,7 +25,7 @@ public class ArbeitsplatzController {
 
     // Aggregate root
     // tag::get-aggregate-root[]
-    @GetMapping("/arbeitsplatz")
+    @GetMapping("/api/arbeitsplatz")
     CollectionModel<EntityModel<Arbeitsplatz>> all() {
 
         List<EntityModel<Arbeitsplatz>> a = repository.findAll().stream() //
@@ -36,7 +36,7 @@ public class ArbeitsplatzController {
     }
     // end::get-aggregate-root[]
 
-    @PostMapping("/arbeitsplatz")
+    @PostMapping("/api/arbeitsplatz")
     ResponseEntity<?> newArbeitsplatz(@RequestBody Arbeitsplatz neuerArbeitsplatz) {
 
         EntityModel<Arbeitsplatz> entityModel = assembler.toModel(repository.save(neuerArbeitsplatz));
@@ -47,7 +47,7 @@ public class ArbeitsplatzController {
     }
     // Single item
 
-    @GetMapping("/arbeitsplatz/{id}")
+    @GetMapping("/api/arbeitsplatz/{id}")
     EntityModel<Arbeitsplatz> one(@PathVariable Long id) {
 
         Arbeitsplatz arbeitsplatz = repository.findById(id)
@@ -56,7 +56,7 @@ public class ArbeitsplatzController {
         return assembler.toModel(arbeitsplatz);
     }
 
-    @PutMapping("/arbeitsplatz/{id}")
+    @PutMapping("/api/arbeitsplatz/{id}")
     ResponseEntity<?> replaceArbeitsplatz(@RequestBody Arbeitsplatz neuerArbeitsplatz, @PathVariable Long id) {
 
         Arbeitsplatz updatedArbeitsplatz = repository.findById(id)
