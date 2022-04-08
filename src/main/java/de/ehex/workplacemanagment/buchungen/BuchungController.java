@@ -34,7 +34,7 @@ public class BuchungController {
     Buchung buchungUeberpruefen(CreateBuchung createBuchung, String username)
             throws MitarbeiterNotFoundException, ArbeitsplatzNotFoundException {
         var mitarbeiter = mitarbeiterRepository.findOptionalMitarbeiterByBenutzername(username)
-                .orElseThrow(()-> new MitarbeiterNotFoundException(createBuchung.getMitarbeiterId()));
+                .orElseThrow(()-> new MitarbeiterNotFoundException(username));
         var arbeitsplatz = arbeitsplatzRepository.findById(createBuchung.getArbeitsplatzId())
                 .orElseThrow(()-> new ArbeitsplatzNotFoundException(createBuchung.getArbeitsplatzId()));
         return new Buchung(mitarbeiter, arbeitsplatz, LocalDate.parse(createBuchung.getDatum()));

@@ -1,5 +1,6 @@
 package de.ehex.workplacemanagment.mitarbeiter;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -15,14 +16,18 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 class MitarbeiterController {
 
-    private final MitarbeiterRepository repository;
+    @Autowired
+    private MitarbeiterRepository repository;
 
-    private final MitarbeiterModelAssembler assembler;
+    @Autowired
+    private MitarbeiterModelAssembler assembler;
 
-    MitarbeiterController(MitarbeiterRepository repository, MitarbeiterModelAssembler assembler) {
+    private boolean benutzerNameVergeben(Mitarbeiter mitarbeiter) {
 
-        this.repository = repository;
-        this.assembler = assembler;
+        if (repository.findMitarbeiterByBenutzername(mitarbeiter.getBenutzername()) == null) {
+            return false;
+        }
+        return true;
     }
 
     // Aggregate root
@@ -39,9 +44,13 @@ class MitarbeiterController {
     // end::get-aggregate-root[]
 
     @PostMapping("/api/mitarbeiter")
-    ResponseEntity<?> newMitarbeiter(@RequestBody Mitarbeiter newEmployee) {
+    ResponseEntity<?> newMitarbeiter(@RequestBody Mitarbeiter neuerMitarbeiter) throws BenutzernameVergebenException {
 
-        EntityModel<Mitarbeiter> entityModel = assembler.toModel(repository.save(newEmployee));
+        if (benutzerNameVergeben(neuerMitarbeiter)) {
+            throw new BenutzernameVergebenException(neuerMitarbeiter.getBenutzername());
+        }
+
+        EntityModel<Mitarbeiter> entityModel = assembler.toModel(repository.save(neuerMitarbeiter));
 
         return ResponseEntity
                 .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
@@ -59,7 +68,12 @@ class MitarbeiterController {
     }
 
     @PutMapping("/api/mitarbeiter/{id}")
-    ResponseEntity<?> replaceMitarbeiter(@RequestBody Mitarbeiter neuerMitarbeiter, @PathVariable Long id) {
+    ResponseEntity<?> replaceMitarbeiter(@RequestBody Mitarbeiter neuerMitarbeiter, @PathVariable Long id)
+            throws BenutzernameVergebenException {
+
+        if (benutzerNameVergeben(neuerMitarbeiter)) {
+            throw new BenutzernameVergebenException(neuerMitarbeiter.getBenutzername());
+        }
 
         Mitarbeiter updatedMitarbeiter = repository.findById(id)
                 .map(mitarbeiter -> {

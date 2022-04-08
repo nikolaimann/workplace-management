@@ -40,19 +40,19 @@ public class MitarbeiterTest {
     @Autowired
     private MockMvc mockMvc;
 
-//    @Test
-//    @WithMockUser(roles = "USER", username="testperson")
-//    public void testMitarbeiterDoppeltHinzufuegen() throws Exception {
-//
-//        Assertions.assertThrows(NestedServletException.class, () ->
-//                this.mockMvc
-//                        .perform(
-//                                MockMvcRequestBuilders.post("/api/mitarbeiter")
-//                                        .contentType(MediaType.APPLICATION_JSON)
-//                                        .content("{\"vorname\": \"Max\",\"name\": \"Mustermann\",\"benutzername\": \"testperson\",\"passwort\": \"test\"}")
-//                        )
-//                        .andExpect(mvcResult -> Assertions.assertTrue(mvcResult instanceof NestedServletException)));
-//    }
+    @Test
+    @WithMockUser(roles = "USER", username="testperson")
+    public void testMitarbeiterDoppeltHinzufuegen() throws Exception {
+
+        Assertions.assertThrows(NestedServletException.class, () ->
+                this.mockMvc
+                        .perform(
+                                MockMvcRequestBuilders.post("/api/mitarbeiter")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content("{\"vorname\": \"Max\",\"name\": \"Mustermann\",\"benutzername\": \"testperson\",\"passwort\": \"test\"}")
+                        )
+                        .andExpect(mvcResult -> Assertions.assertTrue(mvcResult instanceof NestedServletException)));
+    }
 
     @Test
     @WithMockUser(roles = "USER", username="testperson")
