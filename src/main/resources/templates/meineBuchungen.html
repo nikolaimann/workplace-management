@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Workplace-Management</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<h1>Meine Buchungen</h1>
+<a href="/">Alle Buchungen anzeigen</a>
+<a href="/buchung/buchen">Arbeitsplatz buchen</a>
+<a href="/logout" style="background-color: #c94114;"/>Logout</a>
+<table>
+  <tr>
+    <th>Buchung-Id</th><th>Mitarbeiter</th><th>Arbeitsplatz</th><th>Datum</th><th width="30"></th>
+  </tr>
+  <tr th:each="buchung : ${buchungen}">
+    <td th:text="${buchung.id}" />
+    <td>
+      <p th:text="'Vorname: ' + ${buchung.mitarbeiter.vorname}" />
+      <p th:text="'Name: ' + ${buchung.mitarbeiter.name}" />
+    </td>
+    <td>
+      <p th:text="'Raum: ' + ${buchung.arbeitsplatz.raum}" />
+      <p th:text="'Beschreibung: ' + ${buchung.arbeitsplatz.beschreibung}" />
+    </td>
+    <td th:text="${buchung.datum}" />
+    <td>
+      <a th:href="@{/buchung/delete(id=${buchung.id})}">Löschen</a>
+    </td>
+  </tr>
+</table>
+</body>
+</html>
