@@ -1,12 +1,15 @@
 package de.ehex.workplacemanagment.mitarbeiter;
 
+import de.ehex.workplacemanagment.buchungen.ArbeitsplatzBelegtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,10 +47,10 @@ class MitarbeiterController {
     // end::get-aggregate-root[]
 
     @PostMapping("/api/mitarbeiter")
-    ResponseEntity<?> newMitarbeiter(@RequestBody Mitarbeiter neuerMitarbeiter) throws BenutzernameVergebenException {
+    ResponseEntity<?> newMitarbeiter(@RequestBody Mitarbeiter neuerMitarbeiter) {
 
         if (benutzerNameVergeben(neuerMitarbeiter)) {
-            throw new BenutzernameVergebenException(neuerMitarbeiter.getBenutzername());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new BenutzernameVergebenException(neuerMitarbeiter.getBenutzername()));
         }
 
         EntityModel<Mitarbeiter> entityModel = assembler.toModel(repository.save(neuerMitarbeiter));
@@ -68,11 +71,10 @@ class MitarbeiterController {
     }
 
     @PutMapping("/api/mitarbeiter/{id}")
-    ResponseEntity<?> replaceMitarbeiter(@RequestBody Mitarbeiter neuerMitarbeiter, @PathVariable Long id)
-            throws BenutzernameVergebenException {
+    ResponseEntity<?> replaceMitarbeiter(@RequestBody Mitarbeiter neuerMitarbeiter, @PathVariable Long id) {
 
         if (benutzerNameVergeben(neuerMitarbeiter)) {
-            throw new BenutzernameVergebenException(neuerMitarbeiter.getBenutzername());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new BenutzernameVergebenException(neuerMitarbeiter.getBenutzername()));
         }
 
         Mitarbeiter updatedMitarbeiter = repository.findById(id)

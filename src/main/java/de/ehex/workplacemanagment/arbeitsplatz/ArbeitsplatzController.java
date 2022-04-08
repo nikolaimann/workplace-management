@@ -79,7 +79,7 @@ public class ArbeitsplatzController {
                 .body(entityModel);
     }
 
-    @DeleteMapping("/arbeitsplatz/{id}")
+    @DeleteMapping("/api/arbeitsplatz/{id}")
     ResponseEntity<?> deleteArbeitsplatz(@PathVariable Long id) {
 
         repository.deleteById(id);

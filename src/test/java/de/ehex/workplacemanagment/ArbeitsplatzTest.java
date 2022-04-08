@@ -1,7 +1,8 @@
 package de.ehex.workplacemanagment;
 
+import de.ehex.workplacemanagment.arbeitsplatz.Arbeitsplatz;
+import de.ehex.workplacemanagment.arbeitsplatz.ArbeitsplatzRepository;
 import de.ehex.workplacemanagment.mitarbeiter.Mitarbeiter;
-import de.ehex.workplacemanagment.mitarbeiter.MitarbeiterRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,48 +18,41 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class MitarbeiterTest {
+public class ArbeitsplatzTest {
 
     @Autowired
-    MitarbeiterRepository repository;
+    MockMvc mockMvc;
+
+    @Autowired
+    ArbeitsplatzRepository arbeitsplatzRepository;
 
     @BeforeEach
     public void setup() throws Exception {
 
-        if (repository.findMitarbeiterByBenutzername("testperson") == null) {
+        if (arbeitsplatzRepository.findByBeschreibung("testplatz").size() == 0) {
             this.mockMvc
                     .perform(
-                            MockMvcRequestBuilders.post("/api/mitarbeiter")
+                            MockMvcRequestBuilders.post("/api/arbeitsplatz")
                                     .contentType(MediaType.APPLICATION_JSON)
-                                    .content("{\"vorname\": \"Max\",\"name\": \"Mustermann\",\"benutzername\": \"testperson\",\"passwort\": \"test\"}")
+                                    .content("{\"anzahlBildschirme\": 2,\"raum\": 7,\"tischBezeichnung\": \"hinten links\",\"beschreibung\": \"testplatz\"}")
                     );
         }
     }
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Test
-    @WithMockUser(roles = "USER", username="testperson")
-    public void testMitarbeiterDoppeltHinzufuegen() throws Exception {
-        this.mockMvc
-                .perform(
-                        MockMvcRequestBuilders.post("/api/mitarbeiter")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content("{\"vorname\": \"Max\",\"name\": \"Mustermann\",\"benutzername\": \"testperson\",\"passwort\": \"test\"}")
-                )
-                .andExpect(status().isConflict());
-    }
+//    @Test
+//    @WithMockUser(roles = "USER", username="testperson")
+//    public void testArbeitsplatzDoppeltHinzufuegen() throws Exception {
+//    }
 
     @Test
     @WithMockUser(roles = "USER", username="testperson")
     public void testBuchungLoeschen() throws Exception {
 
-        Mitarbeiter testperson = repository.findMitarbeiterByBenutzername("testperson");
+        Arbeitsplatz arbeitsplatz = arbeitsplatzRepository.findByBeschreibung("testplatz").get(0);
 
         this.mockMvc
                 .perform(
-                        MockMvcRequestBuilders.delete("/api/mitarbeiter/{id}", testperson.getId())
+                        MockMvcRequestBuilders.delete("/api/arbeitsplatz/{id}", arbeitsplatz.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().is2xxSuccessful());
@@ -69,28 +63,29 @@ public class MitarbeiterTest {
     @WithMockUser(roles = "USER", username="testperson")
     public void testGetAllBuchungen() throws Exception {
 
-        Mitarbeiter testperson = repository.findMitarbeiterByBenutzername("testperson");
+        Arbeitsplatz arbeitsplatz = arbeitsplatzRepository.findByBeschreibung("testplatz").get(0);
 
         this.mockMvc
-                .perform(MockMvcRequestBuilders.get("/api/mitarbeiter")
+                .perform(MockMvcRequestBuilders.get("/api/arbeitsplatz")
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().is2xxSuccessful())
-                .andExpect(jsonPath("$._embedded.mitarbeiterList["+ (testperson.getId() - 1) +"].name").value("Mustermann"));
+                .andExpect(jsonPath("$._embedded.arbeitsplatzList["+ (arbeitsplatz.getId() - 1) +"].anzahlBildschirme").value(2));
     }
 
     @Test
     @WithMockUser(roles = "USER", username="testperson")
     public void testGetOneBuchungen() throws Exception {
 
-        Mitarbeiter testperson = repository.findMitarbeiterByBenutzername("testperson");
+        Arbeitsplatz arbeitsplatz = arbeitsplatzRepository.findByBeschreibung("testplatz").get(0);
 
         this.mockMvc
-                .perform(MockMvcRequestBuilders.get("/api/mitarbeiter/{id}", testperson.getId())
+                .perform(MockMvcRequestBuilders.get("/api/arbeitsplatz/{id}", arbeitsplatz.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().is2xxSuccessful())
-                .andExpect(jsonPath("$.name").value("Mustermann"))
-                .andExpect(jsonPath("$.vorname").value("Max"));
+                .andExpect(jsonPath("$.anzahlBildschirme").value(2))
+                .andExpect(jsonPath("$.raum").value(7));
     }
+
 }

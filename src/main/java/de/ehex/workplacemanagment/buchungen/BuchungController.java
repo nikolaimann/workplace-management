@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.web.bind.annotation.*;
@@ -54,18 +55,21 @@ public class BuchungController {
     // end::get-aggregate-root[]
 
     @PostMapping("/api/buchung")
-    public ResponseEntity<?> newBuchung(@RequestBody CreateBuchung createBuchung, @CurrentSecurityContext(expression="authentication.name") String username)
-            throws ArbeitsplatzBelegtException, ArbeitsplatzNotFoundException, MitarbeiterNotFoundException {
+    public ResponseEntity<?> newBuchung(@RequestBody CreateBuchung createBuchung, @CurrentSecurityContext(expression="authentication.name") String username) {
        if (buchungRepository.existsByArbeitsplatzIdAndDatum(createBuchung.getArbeitsplatzId(), LocalDate.parse(createBuchung.getDatum()))) {
-           throw new ArbeitsplatzBelegtException(createBuchung.getArbeitsplatzId(), LocalDate.parse(createBuchung.getDatum()));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ArbeitsplatzBelegtException(createBuchung.getArbeitsplatzId(), LocalDate.parse(createBuchung.getDatum())));
        }
-        Buchung buchung = buchungRepository.save(buchungUeberpruefen(createBuchung, username));
+       try {
+           Buchung buchung = buchungRepository.save(buchungUeberpruefen(createBuchung, username));
+           EntityModel<Buchung> entityModel = assembler.toModel(buchung);
 
-        EntityModel<Buchung> entityModel = assembler.toModel(buchung);
+           return ResponseEntity
+                   .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                   .body(entityModel);
 
-        return ResponseEntity
-                .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
-                .body(entityModel);
+       } catch (Exception e) {
+           return ResponseEntity.status(HttpStatus.CONFLICT).body(e);
+       }
     }
     // Single item
 
