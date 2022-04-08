@@ -78,24 +78,6 @@ public class BuchungController {
         return assembler.toModel(buchung);
     }
 
-//    @PutMapping("/buchung/{id}")
-//    ResponseEntity<?> replaceBuchung(@RequestBody CreateBuchung createBuchung, @PathVariable Long id) {
-//
-//        Buchung updatedBuchung = buchungRepository.findById(id)
-//                .map(buchung -> {
-//                    buchung.setMitarbeiter(mitarbeiterRepository.getById(createBuchung.getMitarbeiterId()));
-//                    buchung.setArbeitsplatz(arbeitsplatzRepository.getById(createBuchung.getArbeitsplatzId()));
-//                    return buchungRepository.save(buchung);
-//                })
-//                .orElseGet(() -> buchungUeberpruefen(createBuchung));
-//
-//        EntityModel<Buchung> entityModel = assembler.toModel(updatedBuchung);
-//
-//        return ResponseEntity
-//                .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
-//                .body(entityModel);
-//    }
-
     @DeleteMapping("/api/buchung/{id}")
     public ResponseEntity<?> deleteBuchung(@PathVariable Long id) {
 
