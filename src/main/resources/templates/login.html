@@ -3,7 +3,9 @@
 <head>
   <title>Workplace-Management</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <link rel="stylesheet" href="/styles.css">
+  <link href="/css/styles.css" rel="stylesheet" media="screen" th:href="@{/css/styles.css}"/>
+  <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/css/bootstrap.min.css}"/>
+  <script src="/js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
 </head>
 <body>
 <h1>Login</h1>
@@ -19,7 +21,7 @@
       <td><input type='password' name='password' /></td>
     </tr>
     <tr>
-      <td><input name="submit" type="submit" value="submit" /></td>
+      <td><input name="submit" type="submit" value="Anmelden" /></td>
     </tr>
   </table>
 </form>
