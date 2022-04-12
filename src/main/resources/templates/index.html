@@ -1,41 +1,48 @@
 <!DOCTYPE html>
-<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<html lang="de" xmlns:th="http://www.thymeleaf.org" class="h-100">
   <head>
     <title>Workplace-Management</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="/css/styles.css" rel="stylesheet" media="screen" th:href="@{/css/styles.css}"/>
-    <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" media="screen" th:href="@{/css/bootstrap.min.css}"/>
     <script src="/js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
   </head>
-  <body>
-    <h1>Alle Buchungen</h1>
-    <div th:replace="fragments/header :: header">&nbsp;</div>
-    <table>
-      <caption>Liste aller Buchungen</caption>
-      <thead>
-      <tr>
-        <th>Buchung-Id</th>
-        <th>Mitarbeiter</th>
-        <th>Arbeitsplatz</th>
-        <th>Datum</th>
-      </tr>
-      </thead>
-      <tbody>
+  <body class="d-flex flex-column h-100">
+    <main role="main" class="flex-shrink-0">
+      <div class="container">
+        <h1>Alle Buchungen</h1>
+        <div th:replace="fragments/header :: header">&nbsp;</div>
+          <table>
+            <caption>Liste aller Buchungen</caption>
+            <thead>
+            <tr>
+              <th>Buchung-Id</th>
+              <th>Mitarbeiter</th>
+              <th>Arbeitsplatz</th>
+              <th>Datum</th>
+            </tr>
+            </thead>
+            <tbody>
 
-      <tr th:each="buchung : ${buchungen}">
-        <td th:text="${buchung.id}"/>
-        <td>
-          <p th:text="'Vorname: ' + ${buchung.mitarbeiter.vorname}"/>
-          <p th:text="'Name: ' + ${buchung.mitarbeiter.name}"/>
-        </td>
-        <td>
-          <p th:text="'Raum: ' + ${buchung.arbeitsplatz.raum}"/>
-          <p th:text="'Beschreibung: ' + ${buchung.arbeitsplatz.beschreibung}"/>
-        </td>
-        <td th:text="${buchung.datum}"/>
-      </tr>
-      </tbody>
-    </table>
-    <div th:replace="fragments/footer :: footer">Hier ist der Footer&nbsp;</div>
+            <tr th:each="buchung : ${buchungen}">
+              <td th:text="${buchung.id}"/>
+              <td>
+                <p th:text="'Vorname: ' + ${buchung.mitarbeiter.vorname}"/>
+                <p th:text="'Name: ' + ${buchung.mitarbeiter.name}"/>
+              </td>
+              <td>
+                <p th:text="'Raum: ' + ${buchung.arbeitsplatz.raum}"/>
+                <p th:text="'Beschreibung: ' + ${buchung.arbeitsplatz.beschreibung}"/>
+              </td>
+              <td th:text="${buchung.datum}"/>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </main>
+      <footer class="footer mt-auto py-3">
+         <div class="container" th:replace="fragments/footer :: footer">Hier ist der Footer&nbsp;</div>
+      </footer>
   </body>
 </html>
