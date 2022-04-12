@@ -1,22 +1,54 @@
 <!DOCTYPE html>
-<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<html lang="de" xmlns:th="http://www.thymeleaf.org" class="h-100">
   <head>
     <title>Workplace-Management</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" href="/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="/css/styles.css" rel="stylesheet" media="screen" th:href="@{/css/styles.css}"/>
+    <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/css/bootstrap.min.css}"/>
+    <script src="/js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
   </head>
-  <body>
-    <h1 th:inline="text">Hallo [[${#httpServletRequest.remoteUser}]], lege eine neue Buchung an!</h1>
-
-    <p th:if="${errorMessage}"  th:text="${errorMessage}">Fehler</p>
-    <form action="#" th:action="@{/buchung/buchen}" th:object="${createBuchung}" method="post">
-      <p>Arbeitsplatz-ID: <input type="text" th:field="*{arbeitsplatzId}" placeholder="ID"/></p>
-      <p>Datum: <input type="date" th:field="*{datum}" /></p>
-      <p><input type="submit" value="Buchung abschicken" /></p>
-    </form>
-
-    <form th:action="@{/logout}" method="get">
-      <input type="submit" value="Sign Out"/>
-    </form>
+  <body class="d-flex flex-column h-100">
+  <!-- Begin page content -->
+  <main role="main" class="flex-shrink-0">
+    <div class="container">
+      <h1 th:inline="text">Buchung anlegen</h1>
+      <div th:replace="fragments/header :: header">&nbsp;</div>
+      <h4>Hallo [[${#httpServletRequest.remoteUser}]], lege eine neue Buchung an:</h4>
+      <p th:if="${errorMessage}"  th:text="${errorMessage}">Fehler</p>
+      <form action="#" th:action="@{/buchung/buchen}" th:object="${createBuchung}" method="post">
+        <table>
+          <caption>Neue Buchung</caption>
+          <tbody>
+          <tr>
+            <td>Arbeitsplatz:</td>
+            <td>
+              <select th:field="*{arbeitsplatzId}">
+                <option th:each="workplace: ${workplaces}"
+                        th:value="${workplace.id}"
+                        th:text="${'Raum ' + workplace.raum + ', ' + workplace.tischBezeichnung}">Raum 2, Fenster</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Datum:</td>
+            <td>
+              <input type="date" th:field="*{datum}" />
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>
+              <input type="submit" value="Buchung abschicken" />
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </form>
+      </div>
+    </main>
+    <footer class="footer mt-auto py-3">
+      <div class="container" th:replace="fragments/footer :: footer">Hier ist der Footer&nbsp;</div>
+    </footer>
   </body>
 </html>

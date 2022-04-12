@@ -1,5 +1,7 @@
 package de.ehex.workplacemanagment;
 
+import de.ehex.workplacemanagment.arbeitsplatz.Arbeitsplatz;
+import de.ehex.workplacemanagment.arbeitsplatz.ArbeitsplatzRepository;
 import de.ehex.workplacemanagment.buchungen.*;
 import de.ehex.workplacemanagment.mitarbeiter.MitarbeiterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,9 @@ public class WebController {
     BuchungRepository buchungRepository;
 
     @Autowired
+    ArbeitsplatzRepository arbeitsplatzRepository;
+
+    @Autowired
     MitarbeiterRepository mitarbeiterRepository;
 
     @Autowired
@@ -39,6 +44,8 @@ public class WebController {
 
     @GetMapping("/buchung/buchen")
     public String buchen(Model model) {
+        List<Arbeitsplatz> workplaces = new ArrayList<>(arbeitsplatzRepository.findAll());
+        model.addAttribute("workplaces", workplaces);
         model.addAttribute(new CreateBuchung());
         return "buchen";
     }
